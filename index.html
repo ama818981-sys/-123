@@ -1,0 +1,2884 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>شات كود - تواصل عالمي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Lateef&family=Reem+Kufi&family=Tajawal:wght@300;400;700&family=El+Messiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Almarai:wght@300;400;700&family=Mada:wght@300;400;700&family=Alexandria:wght@300;400;700&family=Lemonada:wght@300;400;700&family=Jomhuria&family=Rakkas&family=Katibeh&family=Lalezar&family=Vibes&family=Harmattan&family=Qahiri&family=Mukta:wght@300;400;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           الأنماط العامة - iOS 27 Glass Style
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: rgba(0, 0, 0, 0.25);
+            --primary: #667eea;
+            --primary-dark: #5a6fd6;
+            --success: #00b894;
+            --danger: #e74c3c;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --bg-start: #0a0a1a;
+            --bg-end: #1a1a2e;
+            --font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-start);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 10px;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 90% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 60%);
+        }
+
+        #app {
+            width: 100%;
+            max-width: 430px;
+            height: 95vh;
+            max-height: 900px;
+            background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* ============================================================
+           شاشة البداية
+           ============================================================ */
+        #splash {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #splash.hide {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+        #splash .logo {
+            font-size: 60px;
+            background: rgba(255,255,255,0.12);
+            padding: 30px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        #splash h1 {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        #splash p {
+            opacity: 0.7;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+        #splash .loader {
+            margin-top: 30px;
+            width: 35px;
+            height: 35px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ============================================================
+           تسجيل الدخول - Glass Style
+           ============================================================ */
+        #login {
+            display: none;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            overflow-y: auto;
+        }
+        #login.active { display: flex; }
+
+        #login .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #login .header .icon {
+            font-size: 40px;
+            background: rgba(255,255,255,0.1);
+            width: 75px;
+            height: 75px;
+            border-radius: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        #login .header h2 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        #login .header p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .input-group {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+        }
+        .input-group:focus-within {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+        }
+        .input-group i {
+            opacity: 0.5;
+            font-size: 16px;
+            width: 20px;
+        }
+        .input-group input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 15px;
+            width: 100%;
+            font-family: var(--font-family);
+        }
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+        .input-group .toggle {
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+        .input-group .toggle:hover { opacity: 0.8; }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-family);
+            margin-top: 5px;
+        }
+        .btn-primary {
+            background: #fff;
+            color: #667eea;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-small {
+            width: auto;
+            padding: 8px 18px;
+            font-size: 13px;
+            margin: 0;
+        }
+        .btn-glass {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+        }
+        .btn-glass:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .switch-mode {
+            text-align: center;
+            margin-top: 15px;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        .switch-mode span {
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           الرئيسية - Glass Style
+           ============================================================ */
+        #home {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+        }
+        #home.active { display: flex; }
+
+        .home-header {
+            padding: 16px 18px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+        }
+        .home-header .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.06);
+            transition: all 0.3s;
+        }
+        .home-header .avatar:hover { border-color: rgba(255,255,255,0.15); }
+        .home-header .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .home-header .info { flex: 1; }
+        .home-header .info .greeting { font-size: 11px; opacity: 0.4; }
+        .home-header .info .name { 
+            font-size: 17px; 
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .home-header .code-badge {
+            background: rgba(0,184,148,0.12);
+            border: 1px solid rgba(0,184,148,0.2);
+            padding: 5px 14px;
+            border-radius: 24px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .home-header .code-badge:hover {
+            background: rgba(0,184,148,0.2);
+            border-color: rgba(0,184,148,0.3);
+        }
+        .home-header .code-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .home-header .settings-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 4px;
+        }
+        .home-header .settings-btn:hover { color: #fff; }
+
+        .search-box {
+            padding: 12px 16px;
+        }
+        .search-box .input-group {
+            margin: 0;
+            padding: 10px 14px;
+            border-radius: 24px;
+        }
+        .search-box .input-group input { font-size: 14px; }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            padding: 0 16px 12px;
+        }
+        .tabs .tab {
+            padding: 7px 16px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: transparent;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-family);
+            backdrop-filter: blur(20px);
+        }
+        .tabs .tab.active {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border-color: rgba(255,255,255,0.1);
+        }
+        .tabs .tab:hover {
+            background: rgba(255,255,255,0.04);
+        }
+        .tabs .tab i { margin-left: 5px; }
+
+        #content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 16px 16px;
+        }
+        #content::-webkit-scrollbar { width: 3px; }
+        #content::-webkit-scrollbar-thumb { 
+            background: rgba(255,255,255,0.06); 
+            border-radius: 10px;
+        }
+
+        .chat-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            backdrop-filter: blur(20px);
+        }
+        .chat-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.04);
+            transform: translateX(-4px);
+        }
+        .chat-item .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.04);
+        }
+        .chat-item .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .chat-item .info { flex: 1; min-width: 0; }
+        .chat-item .info .name { 
+            font-size: 15px; 
+            font-weight: 600;
+        }
+        .chat-item .info .last { 
+            font-size: 12px; 
+            opacity: 0.4; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        .chat-item .meta { text-align: left; flex-shrink: 0; }
+        .chat-item .meta .time { font-size: 10px; opacity: 0.2; }
+        .chat-item .meta .badge {
+            background: var(--primary);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 4px;
+            margin-left: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .empty-state i {
+            font-size: 50px;
+            opacity: 0.08;
+            margin-bottom: 12px;
+        }
+        .empty-state h3 { font-size: 17px; opacity: 0.4; }
+        .empty-state p { font-size: 13px; opacity: 0.2; margin-top: 4px; }
+
+        .fab {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(102,126,234,0.35);
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .fab:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(102,126,234,0.5);
+        }
+        .fab:active { transform: scale(0.92); }
+
+        /* ============================================================
+           شاشة الدردشة - Glass Style
+           ============================================================ */
+        #chat {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+        }
+        #chat.active { display: flex; }
+
+        .chat-header {
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .chat-header .back {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s;
+        }
+        .chat-header .back:hover { color: #fff; }
+        .chat-header .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.04);
+        }
+        .chat-header .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .chat-header .info { flex: 1; }
+        .chat-header .info .name { 
+            font-size: 16px; 
+            font-weight: 700;
+        }
+        .chat-header .info .code { 
+            font-size: 10px; 
+            opacity: 0.3; 
+        }
+        .chat-header .actions {
+            display: flex;
+            gap: 4px;
+        }
+        .chat-header .actions button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.3);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px 8px;
+            transition: color 0.3s;
+            border-radius: 12px;
+        }
+        .chat-header .actions button:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.04);
+        }
+        .chat-header .actions .dev-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        #messages::-webkit-scrollbar { width: 3px; }
+        #messages::-webkit-scrollbar-thumb { 
+            background: rgba(255,255,255,0.06); 
+            border-radius: 10px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            animation: fadeIn 0.3s ease;
+            line-height: 1.5;
+            position: relative;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .msg.sent {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .msg.received {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+            border-bottom-left-radius: 4px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .msg .time {
+            font-size: 9px;
+            opacity: 0.4;
+            display: block;
+            margin-top: 4px;
+        }
+        .msg.sent .time { text-align: right; }
+        .msg .image-msg {
+            max-width: 200px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .msg .image-msg img {
+            width: 100%;
+            border-radius: 12px;
+            display: block;
+        }
+        .msg .video-msg {
+            max-width: 200px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+        .msg .video-msg video {
+            width: 100%;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            display: none;
+            gap: 5px;
+            border-bottom-left-radius: 4px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .typing-indicator.active { display: flex; }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            animation: typing 1.4s ease-in-out infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%,60%,100% { transform: translateY(0); opacity: 0.2; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .chat-input {
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.02);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 0 0 28px 28px;
+            backdrop-filter: blur(20px);
+        }
+        .chat-input button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.3);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 6px 8px;
+            transition: color 0.3s;
+            border-radius: 12px;
+        }
+        .chat-input button:hover { 
+            color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.04);
+        }
+        .chat-input input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: rgba(255,255,255,0.04);
+            padding: 10px 16px;
+            border-radius: 24px;
+            color: #fff;
+            font-size: 14px;
+            font-family: var(--font-family);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: all 0.3s;
+        }
+        .chat-input input:focus {
+            border-color: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.06);
+        }
+        .chat-input input::placeholder { color: rgba(255,255,255,0.2); }
+        .chat-input .send {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .chat-input .send:hover {
+            transform: scale(1.05);
+        }
+        .chat-input .send:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================================
+           الإعدادات - Glass Style
+           ============================================================ */
+        #settings {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+        }
+        #settings.active { display: flex; }
+        #profile {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+        }
+        #profile.active { display: flex; }
+
+        .settings-header {
+            padding: 16px 18px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(20px);
+        }
+        .settings-header .back {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s;
+        }
+        .settings-header .back:hover { color: #fff; }
+        .settings-header h3 {
+            font-size: 19px;
+            font-weight: 700;
+        }
+        .settings-header .save-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: auto;
+            padding: 4px 8px;
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+        .settings-header .save-btn:hover {
+            background: rgba(255,255,255,0.04);
+        }
+
+        .settings-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+        }
+        .settings-list::-webkit-scrollbar { width: 3px; }
+        .settings-list::-webkit-scrollbar-thumb { 
+            background: rgba(255,255,255,0.06); 
+            border-radius: 10px;
+        }
+
+        .settings-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            padding: 13px 16px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            backdrop-filter: blur(20px);
+        }
+        .settings-item:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.04);
+        }
+        .settings-item .icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        .settings-item:hover .icon {
+            background: rgba(255,255,255,0.08);
+        }
+        .settings-item .icon.danger { 
+            background: rgba(231,76,60,0.12); 
+            color: var(--danger);
+        }
+        .settings-item .info { flex: 1; }
+        .settings-item .info .title { 
+            font-size: 14px; 
+            font-weight: 600;
+        }
+        .settings-item .info .sub { 
+            font-size: 12px; 
+            opacity: 0.3;
+        }
+        .settings-item .arrow {
+            opacity: 0.15;
+            font-size: 12px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 10px auto 16px;
+            background: rgba(255,255,255,0.04);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            cursor: pointer;
+            overflow: hidden;
+            border: 3px solid rgba(255,255,255,0.06);
+            position: relative;
+            transition: all 0.3s;
+        }
+        .profile-avatar:hover {
+            border-color: rgba(255,255,255,0.12);
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-avatar .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .profile-avatar:hover .overlay { opacity: 1; }
+
+        .profile-field {
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .profile-field label {
+            font-size: 11px;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .profile-field input,
+        .profile-field textarea {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 15px;
+            width: 100%;
+            font-family: var(--font-family);
+        }
+        .profile-field textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+        .profile-field input::placeholder,
+        .profile-field textarea::placeholder {
+            color: rgba(255,255,255,0.15);
+        }
+
+        .code-display {
+            background: rgba(102,126,234,0.06);
+            border: 2px dashed rgba(102,126,234,0.15);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: var(--primary);
+            margin: 8px 0;
+        }
+
+        /* ============================================================
+           لعبة XO
+           ============================================================ */
+        .xo-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .xo-cell {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.04);
+            border: 2px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #fff;
+        }
+        .xo-cell:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .xo-cell.x { color: var(--primary); }
+        .xo-cell.o { color: var(--success); }
+        .xo-cell.win {
+            background: rgba(0,184,148,0.15);
+            border-color: var(--success);
+            animation: winPulse 0.6s ease;
+        }
+        @keyframes winPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .xo-status {
+            text-align: center;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.6;
+        }
+        .xo-status .highlight {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        /* ============================================================
+           مودال - Glass Style
+           ============================================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: rgba(30, 30, 50, 0.9);
+            border-radius: 28px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal h3 { 
+            font-size: 20px; 
+            font-weight: 700; 
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .modal .body { margin-bottom: 16px; }
+        .modal .footer {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .modal .footer button {
+            padding: 10px 22px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .modal .footer .cancel {
+            background: rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.5);
+        }
+        .modal .footer .cancel:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        .modal .footer .confirm {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+        .modal .footer .confirm:hover {
+            transform: scale(1.02);
+        }
+        .modal .footer .danger {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        /* ============================================================
+           Toast - Glass Style
+           ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 300;
+            max-width: 90%;
+            text-align: center;
+            animation: toastIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        }
+        .toast.success { 
+            background: rgba(0,184,148,0.9);
+            color: #fff;
+        }
+        .toast.error { 
+            background: rgba(231,76,60,0.9);
+            color: #fff;
+        }
+        .toast.info { 
+            background: rgba(102,126,234,0.9);
+            color: #fff;
+        }
+
+        /* ============================================================
+           استجابة
+           ============================================================ */
+        @media (max-width: 430px) {
+            #app { 
+                border-radius: 0; 
+                height: 100vh; 
+                max-height: 100vh;
+                border: none;
+            }
+            body { padding: 0; }
+        }
+        @media (min-width: 431px) {
+            body { padding: 15px; }
+        }
+
+        /* ============================================================
+           Classes مساعدة
+           ============================================================ */
+        .hidden { display: none !important; }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .text-center { text-align: center; }
+        .op-5 { opacity: 0.5; }
+        .flex-center { display: flex; justify-content: center; align-items: center; }
+        .gap-8 { gap: 8px; }
+        .w-full { width: 100%; }
+        .glass-bg {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* ============================================================
+           ثيمات مختلفة
+           ============================================================ */
+        .theme-1 { --bg-start: #0a0a1a; --bg-end: #1a1a2e; --primary: #667eea; }
+        .theme-2 { --bg-start: #1a0a1a; --bg-end: #2e1a2e; --primary: #e6677e; }
+        .theme-3 { --bg-start: #0a1a1a; --bg-end: #1a2e2e; --primary: #67eae6; }
+        .theme-4 { --bg-start: #1a1a0a; --bg-end: #2e2e1a; --primary: #eae667; }
+        .theme-5 { --bg-start: #0a0a2e; --bg-end: #1a1a4e; --primary: #7e67ea; }
+        .theme-6 { --bg-start: #2e0a0a; --bg-end: #4e1a1a; --primary: #ea6767; }
+        .theme-7 { --bg-start: #0a2e0a; --bg-end: #1a4e1a; --primary: #67ea67; }
+        .theme-8 { --bg-start: #2e2e0a; --bg-end: #4e4e1a; --primary: #eae667; }
+        .theme-9 { --bg-start: #0a2e2e; --bg-end: #1a4e4e; --primary: #67eae6; }
+        .theme-10 { --bg-start: #2e0a2e; --bg-end: #4e1a4e; --primary: #ea67ea; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+
+    <!-- ===== شاشة البداية ===== -->
+    <div id="splash">
+        <div class="logo">💬</div>
+        <h1>شات كود</h1>
+        <p>تواصل آمن برموز فريدة</p>
+        <div class="loader"></div>
+        <p style="margin-top:30px;font-size:11px;opacity:0.2;">المطور: Msbah Waled</p>
+    </div>
+
+    <!-- ===== تسجيل الدخول ===== -->
+    <div id="login">
+        <div class="header">
+            <div class="icon"><i class="fas fa-user-circle"></i></div>
+            <h2 id="loginTitle">مرحباً بعودتك</h2>
+            <p id="loginSub">سجل الدخول للتواصل مع أصدقائك</p>
+        </div>
+
+        <div style="flex:1;margin-top:20px;">
+            <form id="loginForm" autocomplete="off">
+                <div id="nameField" class="input-group" style="display:none;">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="nameInput" placeholder="الاسم الكامل">
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" id="phoneInput" placeholder="رقم الهاتف (مثال: 01040428382)">
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="passwordInput" placeholder="كلمة المرور (10 خانات)">
+                    <span class="toggle" onclick="togglePass()"><i class="fas fa-eye"></i></span>
+                </div>
+
+                <div id="confirmField" class="input-group" style="display:none;">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmInput" placeholder="تأكيد كلمة المرور">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <span id="loginBtnText">دخول</span>
+                </button>
+            </form>
+
+            <div class="switch-mode">
+                <span id="switchText">ليس لديك حساب؟</span>
+                <span id="switchBtn" onclick="toggleMode()">إنشاء حساب</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== الرئيسية ===== -->
+    <div id="home">
+        <div class="home-header">
+            <div class="avatar" id="homeAvatar" onclick="goToProfile()">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="info">
+                <div class="greeting">مرحباً 👋</div>
+                <div class="name" id="homeName">مستخدم</div>
+            </div>
+            <div class="code-badge" onclick="showMyCode()">
+                <span class="dot"></span>
+                <span id="homeCode">------</span>
+            </div>
+            <button class="settings-btn" onclick="goToSettings()"><i class="fas fa-cog"></i></button>
+        </div>
+
+        <div class="search-box">
+            <div class="input-group">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث برقم الهاتف..." oninput="searchUsers()">
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="chats" onclick="switchTab('chats')"><i class="fas fa-comment"></i> الدردشات</button>
+            <button class="tab" data-tab="contacts" onclick="switchTab('contacts')"><i class="fas fa-address-book"></i> جهات الاتصال</button>
+            <button class="tab" data-tab="games" onclick="switchTab('games')"><i class="fas fa-gamepad"></i> الألعاب</button>
+        </div>
+
+        <div id="content"></div>
+
+        <button class="fab" onclick="showNewChat()"><i class="fas fa-plus"></i></button>
+    </div>
+
+    <!-- ===== الدردشة ===== -->
+    <div id="chat">
+        <div class="chat-header">
+            <button class="back" onclick="closeChat()"><i class="fas fa-arrow-right"></i></button>
+            <div class="avatar" id="chatAvatar"><i class="fas fa-user"></i></div>
+            <div class="info">
+                <div class="name" id="chatName">مستخدم</div>
+                <div class="code" id="chatCode">📱 ------</div>
+            </div>
+            <div class="actions">
+                <span class="dev-badge"><i class="fas fa-code"></i> msbahwaled</span>
+                <button onclick="showToast('مكالمة قريباً','info')"><i class="fas fa-phone"></i></button>
+                <button onclick="startGame()"><i class="fas fa-gamepad"></i></button>
+            </div>
+        </div>
+
+        <div id="messages"></div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span><span></span><span></span>
+        </div>
+
+        <div class="chat-input">
+            <button onclick="showAttachMenu()"><i class="fas fa-paperclip"></i></button>
+            <button onclick="showEmoji()"><i class="fas fa-smile"></i></button>
+            <input type="text" id="chatInput" placeholder="اكتب رسالة..." oninput="checkChatInput()" onkeydown="if(event.key==='Enter') sendMessage()">
+            <button class="send" id="sendBtn" onclick="sendMessage()" disabled><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- ===== الإعدادات ===== -->
+    <div id="settings">
+        <div class="settings-header">
+            <button class="back" onclick="closeSettings()"><i class="fas fa-arrow-right"></i></button>
+            <h3>الإعدادات</h3>
+        </div>
+        <div class="settings-list" id="settingsList"></div>
+    </div>
+
+    <!-- ===== الملف الشخصي ===== -->
+    <div id="profile">
+        <div class="settings-header">
+            <button class="back" onclick="closeProfile()"><i class="fas fa-arrow-right"></i></button>
+            <h3>الملف الشخصي</h3>
+            <button class="save-btn" onclick="saveProfile()"><i class="fas fa-save"></i> حفظ</button>
+        </div>
+        <div class="settings-list">
+            <div class="profile-avatar" id="profileAvatar" onclick="changeProfilePic()">
+                <i class="fas fa-user"></i>
+                <div class="overlay">تغيير الصورة</div>
+            </div>
+
+            <div class="profile-field">
+                <label>الاسم</label>
+                <input type="text" id="profileName" placeholder="الاسم الكامل">
+            </div>
+
+            <div class="profile-field">
+                <label>رقم الهاتف</label>
+                <input type="text" id="profilePhone" disabled>
+            </div>
+
+            <div class="profile-field">
+                <label>الكود الفريد</label>
+                <div class="code-display" id="profileCode">------</div>
+                <button class="btn btn-small btn-primary" onclick="copyCode()" style="margin-top:8px;">
+                    <i class="fas fa-copy"></i> نسخ الكود
+                </button>
+            </div>
+
+            <div class="profile-field">
+                <label>اختيار الثيم</label>
+                <div id="themeSelector" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;"></div>
+            </div>
+
+            <div class="profile-field">
+                <label>اختيار الخط</label>
+                <select id="fontSelector" style="width:100%;padding:10px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:#fff;font-family:var(--font-family);font-size:14px;outline:none;">
+                    <!-- سيتم ملء الخيارات بواسطة JavaScript -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== مودال ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+        <h3 id="modalTitle">عنوان</h3>
+        <div class="body" id="modalBody"></div>
+        <div class="footer" id="modalFooter"></div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+    // ============================================================
+    // Firebase (قاعدة بيانات سحابية)
+    // ============================================================
+    firebase.initializeApp({
+        apiKey: "AIzaSyBRooXReNaqAVfGkNs-NUGWYmK2_NWHI_M",
+        authDomain: "chatcode-app.firebaseapp.com",
+        projectId: "chatcode-app",
+        storageBucket: "chatcode-app.firebasestorage.app",
+        messagingSenderId: "1061103926251",
+        appId: "1:1061103926251:web:6d718f8a9c4ffb957037ae"
+    });
+    const auth = firebase.auth();
+    const fs = firebase.firestore();
+    const C = { users: [], chats: [], msgs: {}, games: {} };
+    let unsubs = [];
+    let chatUnsubs = [];
+    let sessionStart = 0;
+    const keyOf = (v) => String(v).trim().replace(/[^0-9a-zA-Z]/g, '');
+    const emailOf = (phone) => keyOf(phone) + '@chatcode.app';
+
+    function shrink(dataUrl, max = 1024, q = 0.7) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const r = Math.min(1, max / Math.max(img.width, img.height));
+                const c = document.createElement('canvas');
+                c.width = Math.round(img.width * r);
+                c.height = Math.round(img.height * r);
+                c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                resolve(c.toDataURL('image/jpeg', q));
+            };
+            img.onerror = () => resolve(dataUrl);
+            img.src = dataUrl;
+        });
+    }
+
+    // ============================================================
+    // نظام التخزين (ذاكرة محلية متزامنة مع Firestore)
+    // ============================================================
+    // ============================================================
+    const DB = {
+        getUsers() { return C.users; },
+        getUserByPhone(phone) { return C.users.find(u => u.phone === phone) || null; },
+        getUserByCode(code) { return C.users.find(u => u.code === code) || null; },
+        getUserById(id) { return C.users.find(u => u.id === id) || null; },
+        updateUser(id, data) {
+            const i = C.users.findIndex(u => u.id === id);
+            if (i !== -1) C.users[i] = { ...C.users[i], ...data };
+            fs.collection('users').doc(id).set(data, { merge: true }).catch(e => showToast('تعذر الحفظ: ' + e.message, 'error'));
+            return i !== -1 ? C.users[i] : null;
+        },
+        getMessages(chatId) { return C.msgs[chatId] || []; },
+        addMessage(chatId, message) {
+            if (JSON.stringify(message).length > 950000) {
+                showToast('الملف كبير جداً (الحد حوالي 700KB)', 'error');
+                return null;
+            }
+            message.id = message.id + '_' + Math.random().toString(36).slice(2, 6);
+            const list = C.msgs[chatId] || (C.msgs[chatId] = []);
+            list.push(message);
+            fs.collection('chats').doc(chatId).collection('messages').doc(message.id).set(message)
+                .catch(e => showToast('تعذر إرسال الرسالة: ' + e.message, 'error'));
+            return message;
+        },
+        getChats(userId) { return C.chats.slice(); },
+        addChat(userId, chat) {
+            fs.collection('users').doc(userId).collection('chats').doc(chat.otherId)
+                .set({ ...chat, lastSenderId: currentUser.id }, { merge: true })
+                .catch(e => console.warn('chat', e.message));
+            if (userId === currentUser.id) {
+                const i = C.chats.findIndex(c => c.otherId === chat.otherId);
+                if (i === -1) C.chats.push(chat); else C.chats[i] = { ...C.chats[i], ...chat };
+            }
+            return chat;
+        },
+        getGame(chatId) { return C.games[chatId] || null; },
+        saveGame(chatId, game) {
+            C.games[chatId] = game;
+            fs.collection('games').doc(chatId).set(JSON.parse(JSON.stringify(game)))
+                .catch(e => console.warn('game', e.message));
+        }
+    };
+
+    function subscribeChat(chatId) {
+        chatUnsubs.forEach(u => u()); chatUnsubs = [];
+        chatUnsubs.push(fs.collection('chats').doc(chatId).collection('messages').orderBy('timestamp')
+            .onSnapshot(snap => {
+                C.msgs[chatId] = snap.docs.map(d => d.data());
+                if (chatWithUser && getChatId(currentUser.id, chatWithUser.id) === chatId) loadMessages();
+            }, e => console.warn('msgs', e.message)));
+        chatUnsubs.push(fs.collection('games').doc(chatId).onSnapshot(d => {
+            if (d.exists) C.games[chatId] = d.data();
+        }, () => {}));
+    }
+
+    function waitFirst(register) {
+        return new Promise((resolve) => {
+            let done = false;
+            const fin = () => { if (!done) { done = true; resolve(); } };
+            register(fin);
+            setTimeout(fin, 8000);
+        });
+    }
+
+    async function initSession(uid) {
+        const doc = await fs.collection('users').doc(uid).get();
+        if (!doc.exists) throw new Error('بيانات الحساب غير موجودة');
+        currentUser = doc.data();
+        sessionStart = Date.now();
+        unsubs.forEach(u => u()); unsubs = [];
+        await waitFirst((fin) => {
+            unsubs.push(fs.collection('users').onSnapshot(snap => {
+                C.users = snap.docs.map(d => d.data());
+                const me = C.users.find(u => u.id === uid);
+                if (me) currentUser = { ...currentUser, ...me };
+                fin();
+                if (document.getElementById('home').classList.contains('active') && currentTab === 'chats') loadChats();
+            }, e => { console.warn('users', e.message); fin(); }));
+        });
+        await waitFirst((fin) => {
+            unsubs.push(fs.collection('users').doc(uid).collection('chats').onSnapshot(snap => {
+                C.chats = snap.docs.map(d => d.data());
+                snap.docChanges().forEach(ch => {
+                    const c = ch.doc.data();
+                    if (ch.type !== 'removed' && c.lastSenderId && c.lastSenderId !== uid && Date.parse(c.updatedAt) > sessionStart - 2000) {
+                        const from = DB.getUserById(c.otherId);
+                        if (!(chatWithUser && chatWithUser.id === c.otherId && document.getElementById('chat').classList.contains('active'))) {
+                            showToast('📩 رسالة من ' + (from ? from.name : 'مستخدم'), 'info');
+                            try { if (navigator.vibrate) navigator.vibrate(100); } catch (e) {}
+                        }
+                    }
+                });
+                fin();
+                if (document.getElementById('home').classList.contains('active') && currentTab === 'chats') loadChats();
+            }, e => { console.warn('chats', e.message); fin(); }));
+        });
+    }
+
+    // ============================================================
+    // قائمة الخطوط (25 نوع)
+    // ============================================================
+    const FONTS = [
+        'Cairo', 'Amiri', 'Noto Naskh Arabic', 'Lateef', 'Reem Kufi',
+        'Tajawal', 'El Messiri', 'Aref Ruqaa', 'Almarai', 'Mada',
+        'Alexandria', 'Lemonada', 'Jomhuria', 'Rakkas', 'Katibeh',
+        'Lalezar', 'Vibes', 'Harmattan', 'Qahiri', 'Mukta',
+        'Almarai', 'Cairo', 'Amiri', 'Noto Naskh Arabic', 'Lateef'
+    ];
+
+    // ============================================================
+    // قائمة الثيمات (30 ثيم)
+    // ============================================================
+    const THEMES = [
+        { name: 'أزرق بنفسجي', class: 'theme-1' },
+        { name: 'وردي بنفسجي', class: 'theme-2' },
+        { name: 'أزرق سماوي', class: 'theme-3' },
+        { name: 'ذهبي', class: 'theme-4' },
+        { name: 'بنفسجي غامق', class: 'theme-5' },
+        { name: 'أحمر غامق', class: 'theme-6' },
+        { name: 'أخضر غامق', class: 'theme-7' },
+        { name: 'أصفر', class: 'theme-8' },
+        { name: 'فيروزي', class: 'theme-9' },
+        { name: 'وردي', class: 'theme-10' },
+        { name: 'أزرق فاتح', class: 'theme-1' },
+        { name: 'بنفسجي فاتح', class: 'theme-5' },
+        { name: 'أحمر وردي', class: 'theme-6' },
+        { name: 'أخضر زمردي', class: 'theme-7' },
+        { name: 'برتقالي', class: 'theme-4' },
+        { name: 'سماوي غامق', class: 'theme-3' },
+        { name: 'نيلي', class: 'theme-1' },
+        { name: 'مرجاني', class: 'theme-2' },
+        { name: 'نعناعي', class: 'theme-7' },
+        { name: 'لافندر', class: 'theme-10' },
+        { name: 'كحلي', class: 'theme-1' },
+        { name: 'أرجواني', class: 'theme-5' },
+        { name: 'كستنائي', class: 'theme-6' },
+        { name: 'زيتوني', class: 'theme-4' },
+        { name: 'فيروزي غامق', class: 'theme-3' },
+        { name: 'أزرق بحري', class: 'theme-1' },
+        { name: 'أحمر غامق', class: 'theme-6' },
+        { name: 'أخضر غامق', class: 'theme-7' },
+        { name: 'أصفر ذهبي', class: 'theme-4' },
+        { name: 'وردي فاتح', class: 'theme-10' }
+    ];
+
+    // ============================================================
+    // المتغيرات العامة
+    // ============================================================
+    let currentUser = null;
+    let chatWithUser = null;
+    let isLoginMode = true;
+    let currentTab = 'chats';
+    let messageInterval = null;
+    let gameActive = false;
+    let gameSymbol = 'X';
+    let gameBoard = null;
+
+    // ============================================================
+    // شاشة البداية
+    // ============================================================
+    setTimeout(() => {
+        document.getElementById('splash').classList.add('hide');
+        setTimeout(() => {
+            document.getElementById('splash').style.display = 'none';
+            const stop = auth.onAuthStateChanged(async (u) => {
+                stop();
+                if (u) {
+                    try {
+                        await initSession(u.uid);
+                        document.getElementById('login').classList.remove('active');
+                        document.getElementById('home').classList.add('active');
+                        loadHome();
+                        loadFontsAndThemes();
+                        return;
+                    } catch (e) { console.warn(e); }
+                }
+                document.getElementById('login').classList.add('active');
+            });
+        }, 500);
+    }, 1200);
+
+    // ============================================================
+    // تحميل الخطوط والثيمات
+    // ============================================================
+    function loadFontsAndThemes() {
+        // تحميل الخطوط
+        const selector = document.getElementById('fontSelector');
+        selector.innerHTML = '';
+        for (const font of FONTS) {
+            const option = document.createElement('option');
+            option.value = font;
+            option.textContent = font;
+            if (font === currentUser.font || font === 'Cairo') {
+                option.selected = true;
+            }
+            selector.appendChild(option);
+        }
+        selector.onchange = function() {
+            document.documentElement.style.setProperty('--font-family', `'${this.value}', 'Cairo', sans-serif`);
+            currentUser.font = this.value;
+            DB.updateUser(currentUser.id, { font: this.value });
+            localStorage.setItem('chat_current_user', JSON.stringify(currentUser));
+            showToast('✅ تم تغيير الخط', 'success');
+        };
+
+        // تحميل الثيمات
+        const container = document.getElementById('themeSelector');
+        container.innerHTML = '';
+        for (const theme of THEMES) {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-small btn-glass';
+            btn.textContent = theme.name;
+            btn.style.fontSize = '11px';
+            btn.style.padding = '6px 12px';
+            btn.onclick = function() {
+                document.getElementById('app').className = theme.class;
+                currentUser.theme = theme.class;
+                DB.updateUser(currentUser.id, { theme: theme.class });
+                localStorage.setItem('chat_current_user', JSON.stringify(currentUser));
+                showToast(`✅ تم تغيير الثيم: ${theme.name}`, 'success');
+            };
+            if (currentUser.theme && currentUser.theme === theme.class) {
+                btn.style.background = 'rgba(102,126,234,0.2)';
+                btn.style.borderColor = 'rgba(102,126,234,0.3)';
+            }
+            container.appendChild(btn);
+        }
+
+        // تطبيق الثيم المحفوظ
+        if (currentUser.theme) {
+            document.getElementById('app').className = currentUser.theme;
+        }
+        if (currentUser.font) {
+            document.documentElement.style.setProperty('--font-family', `'${currentUser.font}', 'Cairo', sans-serif`);
+        }
+    }
+
+    // ============================================================
+    // تسجيل الدخول
+    // ============================================================
+    function toggleMode() {
+        isLoginMode = !isLoginMode;
+        document.getElementById('loginTitle').textContent = isLoginMode ? 'مرحباً بعودتك' : 'انضم إلينا الآن';
+        document.getElementById('loginSub').textContent = isLoginMode ? 'سجل الدخول للتواصل مع أصدقائك' : 'أنشئ حسابك وابدأ التواصل';
+        document.getElementById('nameField').style.display = isLoginMode ? 'none' : 'flex';
+        document.getElementById('confirmField').style.display = isLoginMode ? 'none' : 'flex';
+        document.getElementById('loginBtnText').textContent = isLoginMode ? 'دخول' : 'إنشاء حساب';
+        document.getElementById('switchText').textContent = isLoginMode ? 'ليس لديك حساب؟' : 'لديك حساب بالفعل؟';
+        document.getElementById('switchBtn').textContent = isLoginMode ? 'إنشاء حساب' : 'تسجيل الدخول';
+    }
+
+    function togglePass() {
+        const input = document.getElementById('passwordInput');
+        const icon = document.querySelector('.toggle i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('loginBtn');
+        const btnText = document.getElementById('loginBtnText');
+        btn.disabled = true;
+        btnText.innerHTML = '⏳ جاري...';
+
+        const phone = document.getElementById('phoneInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
+
+        try {
+            if (isLoginMode) {
+                if (!keyOf(phone)) throw new Error('أدخل رقم الهاتف أو الكود');
+                const look = await fs.collection('lookup').doc(keyOf(phone)).get();
+                if (!look.exists) throw new Error('المستخدم غير موجود');
+                try {
+                    const cred = await auth.signInWithEmailAndPassword(look.data().email, password);
+                    await initSession(cred.user.uid);
+                } catch (err) {
+                    if (err.code && err.code.startsWith('auth/')) throw new Error('كلمة المرور غير صحيحة');
+                    throw err;
+                }
+
+                showToast('✅ تم تسجيل الدخول', 'success');
+                document.getElementById('login').classList.remove('active');
+                document.getElementById('home').classList.add('active');
+                loadHome();
+                loadFontsAndThemes();
+
+            } else {
+                const name = document.getElementById('nameInput').value.trim();
+                const confirm = document.getElementById('confirmInput').value.trim();
+
+                if (!name) throw new Error('الاسم مطلوب');
+                if (!keyOf(phone)) throw new Error('رقم الهاتف مطلوب');
+                if (password.length < 10) throw new Error('كلمة المرور 10 خانات');
+                if (password !== confirm) throw new Error('كلمة المرور غير متطابقة');
+                if ((await fs.collection('lookup').doc(keyOf(phone)).get()).exists) throw new Error('رقم الهاتف مستخدم');
+
+                const email = emailOf(phone);
+                let cred;
+                try {
+                    cred = await auth.createUserWithEmailAndPassword(email, password);
+                } catch (err) {
+                    if (err.code === 'auth/email-already-in-use') throw new Error('رقم الهاتف مستخدم');
+                    throw err;
+                }
+                const uid = cred.user.uid;
+
+                let code;
+                let exists = true;
+                let attempts = 0;
+                while (exists && attempts < 20) {
+                    code = generateCode();
+                    exists = (await fs.collection('lookup').doc(code).get()).exists;
+                    attempts++;
+                }
+                if (exists) throw new Error('تعذر إنشاء كود');
+
+                const newUser = {
+                    id: uid,
+                    name,
+                    phone,
+                    code,
+                    profileImage: '',
+                    status: 'مرحباً! أنا أستخدم شات كود',
+                    createdAt: new Date().toISOString(),
+                    font: 'Cairo',
+                    theme: 'theme-1'
+                };
+                const batch = fs.batch();
+                batch.set(fs.collection('users').doc(uid), newUser);
+                batch.set(fs.collection('lookup').doc(keyOf(phone)), { email });
+                batch.set(fs.collection('lookup').doc(code), { email });
+                await batch.commit();
+                await initSession(uid);
+
+                showToast(`✅ تم إنشاء الحساب! كودك: ${code}`, 'success');
+                showModal('كودك الفريد', `
+                    <p>شارك هذا الكود للتواصل معك</p>
+                    <div class="code-display">${code}</div>
+                    <button class="btn btn-primary mt-10" onclick="closeModal();document.getElementById('login').classList.remove('active');document.getElementById('home').classList.add('active');loadHome();loadFontsAndThemes();">متابعة</button>
+                `);
+                btn.disabled = false;
+                btnText.textContent = 'إنشاء حساب';
+                return;
+            }
+
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+
+        btn.disabled = false;
+        btnText.textContent = isLoginMode ? 'دخول' : 'إنشاء حساب';
+    });
+
+    function generateCode() {
+        const d = [0,1,2,3,4,5,6,7,8,9];
+        let code = '';
+        for (let i = 0; i < 8; i++) {
+            const idx = Math.floor(Math.random() * d.length);
+            code += d[idx];
+            d.splice(idx, 1);
+        }
+        return code;
+    }
+
+    // ============================================================
+    // الشاشة الرئيسية
+    // ============================================================
+    function loadHome() {
+        if (!currentUser) return;
+        document.getElementById('homeName').textContent = currentUser.name;
+        document.getElementById('homeCode').textContent = currentUser.code || '------';
+        if (currentUser.profileImage) {
+            document.getElementById('homeAvatar').innerHTML = `<img src="${currentUser.profileImage}">`;
+        }
+        loadChats();
+        startMessageListener();
+    }
+
+    function loadChats() {
+        const chats = DB.getChats(currentUser.id);
+        const container = document.getElementById('content');
+
+        if (chats.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-comment-dots"></i>
+                    <h3>لا توجد محادثات</h3>
+                    <p>ابحث عن مستخدم وابدأ الدردشة</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        chats.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+        for (const chat of chats) {
+            const user = DB.getUserById(chat.otherId);
+            if (!user) continue;
+            const lastMsg = chat.lastMessage || 'ابدأ المحادثة';
+            html += `
+                <div class="chat-item" onclick="openChat('${user.id}')">
+                    <div class="avatar">
+                        ${user.profileImage ? `<img src="${user.profileImage}">` : '<i class="fas fa-user"></i>'}
+                    </div>
+                    <div class="info">
+                        <div class="name">${user.name}</div>
+                        <div class="last">${lastMsg}</div>
+                    </div>
+                    <div class="meta">
+                        <div class="time">${formatTime(chat.updatedAt)}</div>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // البحث عن المستخدمين
+    // ============================================================
+    function searchUsers() {
+        const query = document.getElementById('searchInput').value.trim();
+        const container = document.getElementById('content');
+
+        if (!query) {
+            loadChats();
+            return;
+        }
+
+        const allUsers = DB.getUsers();
+        const results = allUsers.filter(u => 
+            u.id !== currentUser.id && 
+            (u.phone.includes(query) || u.name.includes(query) || (u.code && u.code.includes(query)))
+        );
+
+        if (results.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>لا توجد نتائج</h3>
+                    <p>تأكد من رقم الهاتف أو الكود</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        for (const user of results) {
+            html += `
+                <div class="chat-item" onclick="openChat('${user.id}')">
+                    <div class="avatar">
+                        ${user.profileImage ? `<img src="${user.profileImage}">` : '<i class="fas fa-user"></i>'}
+                    </div>
+                    <div class="info">
+                        <div class="name">${user.name}</div>
+                        <div class="last">📱 ${user.phone}</div>
+                    </div>
+                    <div class="meta">
+                        <span style="background:var(--primary);padding:2px 12px;border-radius:20px;font-size:11px;">دردشة</span>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // التبويبات
+    // ============================================================
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+        if (tab === 'chats') loadChats();
+        else if (tab === 'contacts') loadContacts();
+        else if (tab === 'games') loadGames();
+    }
+
+    function loadContacts() {
+        const allUsers = DB.getUsers();
+        const container = document.getElementById('content');
+        const users = allUsers.filter(u => u.id !== currentUser.id);
+
+        if (users.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-address-book"></i>
+                    <h3>لا توجد جهات اتصال</h3>
+                    <p>ابحث عن مستخدمين للتواصل</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        for (const user of users) {
+            html += `
+                <div class="chat-item" onclick="openChat('${user.id}')">
+                    <div class="avatar">
+                        ${user.profileImage ? `<img src="${user.profileImage}">` : '<i class="fas fa-user"></i>'}
+                    </div>
+                    <div class="info">
+                        <div class="name">${user.name}</div>
+                        <div class="last">📱 ${user.phone}</div>
+                    </div>
+                    <div class="meta">
+                        <span style="background:rgba(255,255,255,0.06);padding:2px 12px;border-radius:20px;font-size:11px;">${user.code || '------'}</span>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    function loadGames() {
+        const container = document.getElementById('content');
+        const allUsers = DB.getUsers();
+        const users = allUsers.filter(u => u.id !== currentUser.id);
+
+        if (users.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>الألعاب</h3>
+                    <p>ابحث عن مستخدم للعب معه</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = `
+            <div class="empty-state" style="padding:20px;">
+                <i class="fas fa-gamepad" style="font-size:40px;"></i>
+                <h3 style="font-size:16px;">اختر خصمك للعب</h3>
+            </div>
+        `;
+        for (const user of users) {
+            html += `
+                <div class="chat-item" onclick="openChat('${user.id}')">
+                    <div class="avatar">
+                        ${user.profileImage ? `<img src="${user.profileImage}">` : '<i class="fas fa-user"></i>'}
+                    </div>
+                    <div class="info">
+                        <div class="name">${user.name}</div>
+                        <div class="last">🎮 العب مع ${user.name}</div>
+                    </div>
+                    <div class="meta">
+                        <span style="background:var(--success);padding:2px 12px;border-radius:20px;font-size:11px;">العب الآن</span>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    // فتح الدردشة
+    // ============================================================
+    function openChat(userId) {
+        chatWithUser = DB.getUserById(userId);
+        if (!chatWithUser) {
+            showToast('المستخدم غير موجود', 'error');
+            return;
+        }
+
+        document.getElementById('home').classList.remove('active');
+        document.getElementById('chat').classList.add('active');
+
+        document.getElementById('chatName').textContent = chatWithUser.name;
+        document.getElementById('chatCode').textContent = `📱 ${chatWithUser.phone}`;
+        const avatar = document.getElementById('chatAvatar');
+        avatar.innerHTML = chatWithUser.profileImage ? `<img src="${chatWithUser.profileImage}">` : '<i class="fas fa-user"></i>';
+
+        subscribeChat(getChatId(currentUser.id, chatWithUser.id));
+        loadMessages();
+        document.getElementById('chatInput').focus();
+        gameActive = false;
+    }
+
+    function loadMessages() {
+        const chatId = getChatId(currentUser.id, chatWithUser.id);
+        const messages = DB.getMessages(chatId);
+        renderMessages(messages);
+    }
+
+    function renderMessages(messages) {
+        const container = document.getElementById('messages');
+
+        if (messages.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state" style="padding:30px 20px;">
+                    <i class="fas fa-comment-dots" style="font-size:40px;"></i>
+                    <h3 style="font-size:15px;">ابدأ المحادثة مع ${chatWithUser.name}</h3>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        for (const msg of messages) {
+            const isMe = msg.senderId === currentUser.id;
+            const time = formatTime(msg.timestamp);
+
+            if (msg.type === 'text') {
+                html += `
+                    <div class="msg ${isMe ? 'sent' : 'received'}">
+                        ${msg.content}
+                        <span class="time">${time}</span>
+                    </div>
+                `;
+            } else if (msg.type === 'image') {
+                html += `
+                    <div class="msg ${isMe ? 'sent' : 'received'}">
+                        <div class="image-msg" onclick="viewImage('${msg.content}')">
+                            <img src="${msg.content}" alt="صورة">
+                        </div>
+                        <span class="time">${time}</span>
+                    </div>
+                `;
+            } else if (msg.type === 'video') {
+                html += `
+                    <div class="msg ${isMe ? 'sent' : 'received'}">
+                        <div class="video-msg" onclick="viewVideo('${msg.content}')">
+                            <video src="${msg.content}" controls></video>
+                        </div>
+                        <span class="time">${time}</span>
+                    </div>
+                `;
+            } else if (msg.type === 'game') {
+                html += `
+                    <div class="msg ${isMe ? 'sent' : 'received'}" style="max-width:95%;">
+                        <div style="background:rgba(255,255,255,0.04);border-radius:16px;padding:12px;">
+                            ${msg.content}
+                        </div>
+                        <span class="time">${time}</span>
+                    </div>
+                `;
+            } else if (msg.type === 'game_move') {
+                html += `
+                    <div class="msg ${isMe ? 'sent' : 'received'}" style="max-width:95%;">
+                        <div style="background:rgba(255,255,255,0.04);border-radius:16px;padding:12px;">
+                            ${msg.content}
+                        </div>
+                        <span class="time">${time}</span>
+                    </div>
+                `;
+            }
+        }
+
+        container.innerHTML = html;
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function getChatId(user1, user2) {
+        return [user1, user2].sort().join('_');
+    }
+
+    // ============================================================
+    // إرسال رسالة
+    // ============================================================
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const chatId = getChatId(currentUser.id, chatWithUser.id);
+        const msg = {
+            id: Date.now().toString(),
+            senderId: currentUser.id,
+            type: 'text',
+            content: text,
+            timestamp: new Date().toISOString(),
+            isRead: false
+        };
+
+        DB.addMessage(chatId, msg);
+        updateChat(chatId, text);
+        input.value = '';
+        document.getElementById('sendBtn').disabled = true;
+        loadMessages();
+        notifyUser(chatWithUser.id, text);
+    }
+
+    function updateChat(chatId, lastMessage) {
+        const chatData = {
+            otherId: chatWithUser.id,
+            lastMessage: lastMessage,
+            updatedAt: new Date().toISOString()
+        };
+        DB.addChat(currentUser.id, chatData);
+        DB.addChat(chatWithUser.id, { 
+            otherId: currentUser.id, 
+            lastMessage: lastMessage, 
+            updatedAt: new Date().toISOString() 
+        });
+    }
+
+    // ============================================================
+    // إرسال صور وفيديوهات
+    // ============================================================
+    function showAttachMenu() {
+        showModal('إرفاق ملف', `
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <button class="btn btn-primary" onclick="closeModal();sendImage();">
+                    <i class="fas fa-image"></i> صورة
+                </button>
+                <button class="btn btn-success" onclick="closeModal();sendVideo();">
+                    <i class="fas fa-video"></i> فيديو
+                </button>
+                <button class="btn btn-glass" onclick="closeModal();sendFile();">
+                    <i class="fas fa-file"></i> ملف
+                </button>
+            </div>
+        `);
+    }
+
+    function sendImage() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (ev) => {
+                const data = await shrink(ev.target.result);
+                const chatId = getChatId(currentUser.id, chatWithUser.id);
+                const msg = {
+                    id: Date.now().toString(),
+                    senderId: currentUser.id,
+                    type: 'image',
+                    content: data,
+                    timestamp: new Date().toISOString(),
+                    isRead: false
+                };
+                DB.addMessage(chatId, msg);
+                updateChat(chatId, '📷 صورة');
+                loadMessages();
+                notifyUser(chatWithUser.id, '📷 صورة');
+                showToast('✅ تم إرسال الصورة', 'success');
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    }
+
+    function sendVideo() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'video/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 600 * 1024) { showToast('حجم الفيديو كبير (الحد 600KB)', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const data = ev.target.result;
+                const chatId = getChatId(currentUser.id, chatWithUser.id);
+                const msg = {
+                    id: Date.now().toString(),
+                    senderId: currentUser.id,
+                    type: 'video',
+                    content: data,
+                    timestamp: new Date().toISOString(),
+                    isRead: false
+                };
+                DB.addMessage(chatId, msg);
+                updateChat(chatId, '🎬 فيديو');
+                loadMessages();
+                notifyUser(chatWithUser.id, '🎬 فيديو');
+                showToast('✅ تم إرسال الفيديو', 'success');
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    }
+
+    function sendFile() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 600 * 1024) { showToast('حجم الملف كبير (الحد 600KB)', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const data = ev.target.result;
+                const chatId = getChatId(currentUser.id, chatWithUser.id);
+                const msg = {
+                    id: Date.now().toString(),
+                    senderId: currentUser.id,
+                    type: 'text',
+                    content: `📎 ${file.name}`,
+                    timestamp: new Date().toISOString(),
+                    isRead: false
+                };
+                DB.addMessage(chatId, msg);
+                updateChat(chatId, `📎 ${file.name}`);
+                loadMessages();
+                notifyUser(chatWithUser.id, `📎 ${file.name}`);
+                showToast('✅ تم إرسال الملف', 'success');
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    }
+
+    // ============================================================
+    // عرض الصور والفيديوهات
+    // ============================================================
+    function viewImage(url) {
+        showModal('صورة', `<img src="${url}" style="width:100%;border-radius:16px;">`);
+    }
+
+    function viewVideo(url) {
+        showModal('فيديو', `<video src="${url}" controls style="width:100%;border-radius:16px;"></video>`);
+    }
+
+    // ============================================================
+    // لعبة XO
+    // ============================================================
+    function startGame() {
+        if (!chatWithUser) {
+            showToast('افتح دردشة أولاً', 'error');
+            return;
+        }
+
+        gameActive = true;
+        gameBoard = Array(9).fill(null);
+        gameSymbol = 'X';
+
+        const boardHtml = `
+            <div class="xo-board" id="xoBoard">
+                ${Array(9).fill(null).map((_, i) => `
+                    <div class="xo-cell" data-index="${i}" onclick="makeMove(${i})"></div>
+                `).join('')}
+            </div>
+            <div class="xo-status" id="xoStatus">
+                <span class="highlight">${currentUser.name}</span> (X) يبدأ اللعب
+            </div>
+            <button class="btn btn-small btn-glass" onclick="resetGame()" style="margin-top:10px;">
+                <i class="fas fa-redo"></i> إعادة اللعبة
+            </button>
+        `;
+
+        const chatId = getChatId(currentUser.id, chatWithUser.id);
+        const gameMsg = {
+            id: Date.now().toString(),
+            senderId: currentUser.id,
+            type: 'game',
+            content: boardHtml,
+            timestamp: new Date().toISOString(),
+            isRead: false
+        };
+        DB.addMessage(chatId, gameMsg);
+        updateChat(chatId, '🎮 لعبة XO');
+        loadMessages();
+        notifyUser(chatWithUser.id, '🎮 بدأ لعبة XO');
+
+        // حفظ حالة اللعبة
+        DB.saveGame(chatId, {
+            board: gameBoard,
+            symbol: gameSymbol,
+            currentPlayer: currentUser.id,
+            active: true
+        });
+
+        showToast('🎮 بدأت لعبة XO!', 'success');
+    }
+
+    function makeMove(index) {
+        if (!gameActive) {
+            showToast('اللعبة غير نشطة', 'error');
+            return;
+        }
+        if (gameBoard[index]) {
+            showToast('هذه الخانة مشغولة', 'error');
+            return;
+        }
+
+        const chatId = getChatId(currentUser.id, chatWithUser.id);
+        const game = DB.getGame(chatId);
+        if (!game || !game.active) {
+            showToast('اللعبة انتهت', 'error');
+            return;
+        }
+
+        // التحقق من الدور
+        if (game.currentPlayer !== currentUser.id) {
+            showToast('انتظر دورك', 'error');
+            return;
+        }
+
+        gameBoard[index] = game.symbol;
+        game.currentPlayer = chatWithUser.id;
+        game.symbol = game.symbol === 'X' ? 'O' : 'X';
+
+        // التحقق من الفوز
+        const winner = checkWinner(gameBoard);
+        let statusText = '';
+        let gameOver = false;
+
+        if (winner) {
+            const winnerName = winner === 'X' ? currentUser.name : chatWithUser.name;
+            statusText = `🏆 ${winnerName} فاز!`;
+            gameOver = true;
+            game.active = false;
+            // تمييز الخانات الفائزة
+            const winCells = getWinCells(gameBoard);
+            setTimeout(() => {
+                document.querySelectorAll('.xo-cell').forEach((cell, i) => {
+                    if (winCells.includes(i)) {
+                        cell.classList.add('win');
+                    }
+                });
+            }, 100);
+        } else if (gameBoard.every(c => c !== null)) {
+            statusText = '🤝 تعادل!';
+            gameOver = true;
+            game.active = false;
+        } else {
+            const nextPlayer = game.currentPlayer === currentUser.id ? currentUser.name : chatWithUser.name;
+            statusText = `${nextPlayer} (${game.symbol}) دوره`;
+        }
+
+        // تحديث واجهة اللعبة
+        const boardHtml = `
+            <div class="xo-board" id="xoBoard">
+                ${gameBoard.map((cell, i) => `
+                    <div class="xo-cell ${cell ? cell.toLowerCase() : ''}" data-index="${i}" onclick="makeMove(${i})">
+                        ${cell || ''}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="xo-status" id="xoStatus">
+                <span class="highlight">${statusText || 'جاري اللعب...'}</span>
+            </div>
+            ${gameOver ? `<button class="btn btn-small btn-success" onclick="resetGame()" style="margin-top:10px;">
+                <i class="fas fa-redo"></i> لعبة جديدة
+            </button>` : ''}
+        `;
+
+        // إرسال حركة جديدة
+        const moveMsg = {
+            id: Date.now().toString(),
+            senderId: currentUser.id,
+            type: 'game_move',
+            content: boardHtml,
+            timestamp: new Date().toISOString(),
+            isRead: false
+        };
+        DB.addMessage(chatId, moveMsg);
+        DB.saveGame(chatId, game);
+        loadMessages();
+
+        if (!gameOver) {
+            notifyUser(chatWithUser.id, '🎮 دورك في لعبة XO');
+        }
+    }
+
+    function resetGame() {
+        gameActive = true;
+        gameBoard = Array(9).fill(null);
+        gameSymbol = 'X';
+
+        const chatId = getChatId(currentUser.id, chatWithUser.id);
+        DB.saveGame(chatId, {
+            board: gameBoard,
+            symbol: gameSymbol,
+            currentPlayer: currentUser.id,
+            active: true
+        });
+
+        const boardHtml = `
+            <div class="xo-board" id="xoBoard">
+                ${Array(9).fill(null).map((_, i) => `
+                    <div class="xo-cell" data-index="${i}" onclick="makeMove(${i})"></div>
+                `).join('')}
+            </div>
+            <div class="xo-status" id="xoStatus">
+                <span class="highlight">${currentUser.name}</span> (X) يبدأ اللعب
+            </div>
+            <button class="btn btn-small btn-glass" onclick="resetGame()" style="margin-top:10px;">
+                <i class="fas fa-redo"></i> إعادة اللعبة
+            </button>
+        `;
+
+        const resetMsg = {
+            id: Date.now().toString(),
+            senderId: currentUser.id,
+            type: 'game_move',
+            content: boardHtml,
+            timestamp: new Date().toISOString(),
+            isRead: false
+        };
+        DB.addMessage(chatId, resetMsg);
+        loadMessages();
+        notifyUser(chatWithUser.id, '🔄 تم إعادة تشغيل لعبة XO');
+        showToast('🔄 تم إعادة اللعبة', 'success');
+    }
+
+    function checkWinner(board) {
+        const lines = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ];
+        for (const [a, b, c] of lines) {
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return board[a];
+            }
+        }
+        return null;
+    }
+
+    function getWinCells(board) {
+        const lines = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ];
+        for (const [a, b, c] of lines) {
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return [a, b, c];
+            }
+        }
+        return [];
+    }
+
+    // ============================================================
+    // الإيموجي
+    // ============================================================
+    function showEmoji() {
+        const emojis = ['😊', '😂', '❤️', '🔥', '👍', '👏', '🎉', '💯', '🤔', '😍', '🥰', '😘', '🤗', '😎', '🥳', '🎊', '💪', '🤝', '👋', '🙏'];
+        let html = '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">';
+        for (const emoji of emojis) {
+            html += `
+                <div onclick="insertEmoji('${emoji}')" style="
+                    font-size:28px;
+                    text-align:center;
+                    padding:8px;
+                    cursor:pointer;
+                    border-radius:12px;
+                    transition:background 0.2s;
+                " onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                    ${emoji}
+                </div>
+            `;
+        }
+        html += '</div>';
+        showModal('اختر إيموجي', html);
+    }
+
+    function insertEmoji(emoji) {
+        const input = document.getElementById('chatInput');
+        input.value += emoji;
+        closeModal();
+        checkChatInput();
+    }
+
+    // ============================================================
+    // نظام الإشعارات
+    // ============================================================
+    function notifyUser(userId, message) {
+        // الإشعارات تتم عبر تحديث المحادثة في Firestore (فوري)
+    }
+
+    function startMessageListener() {}
+
+    // ============================================================
+    // إغلاق الدردشة
+    // ============================================================
+    function closeChat() {
+        document.getElementById('chat').classList.remove('active');
+        document.getElementById('home').classList.add('active');
+        chatWithUser = null;
+        gameActive = false;
+        loadChats();
+    }
+
+    // ============================================================
+    // التحقق من الإدخال
+    // ============================================================
+    function checkChatInput() {
+        const input = document.getElementById('chatInput');
+        document.getElementById('sendBtn').disabled = !input.value.trim();
+    }
+
+    // ============================================================
+    // عرض دردشة جديدة
+    // ============================================================
+    function showNewChat() {
+        showModal('بدء محادثة جديدة', `
+            <p>أدخل رقم الهاتف أو الكود:</p>
+            <div class="input-group" style="margin-top:10px;">
+                <i class="fas fa-phone"></i>
+                <input type="text" id="newChatPhone" placeholder="مثال: 01040428382 أو 87654321">
+            </div>
+        `, `
+            <button class="cancel" onclick="closeModal()">إلغاء</button>
+            <button class="confirm" onclick="startNewChat()">بحث</button>
+        `);
+    }
+
+    function startNewChat() {
+        const input = document.getElementById('newChatPhone').value.trim();
+        if (!input) {
+            showToast('أدخل رقم الهاتف أو الكود', 'error');
+            return;
+        }
+
+        let user = DB.getUserByPhone(input);
+        if (!user) {
+            user = DB.getUserByCode(input);
+        }
+
+        if (!user) {
+            showToast('المستخدم غير موجود', 'error');
+            return;
+        }
+
+        if (user.id === currentUser.id) {
+            showToast('لا يمكن الدردشة مع نفسك', 'error');
+            return;
+        }
+
+        closeModal();
+        openChat(user.id);
+    }
+
+    // ============================================================
+    // عرض الكود
+    // ============================================================
+    function showMyCode() {
+        const code = currentUser.code || '------';
+        showModal('الكود الخاص بي', `
+            <p>شارك هذا الكود للتواصل معك</p>
+            <div class="code-display">${code}</div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+                <button class="btn btn-small btn-primary" onclick="copyCode();closeModal();" style="flex:1;">
+                    <i class="fas fa-copy"></i> نسخ
+                </button>
+                <button class="btn btn-small btn-success" onclick="shareCode('${code}');closeModal();" style="flex:1;">
+                    <i class="fas fa-share-alt"></i> مشاركة
+                </button>
+            </div>
+        `);
+    }
+
+    function copyCode() {
+        const code = currentUser.code || '------';
+        navigator.clipboard.writeText(code).then(() => {
+            showToast('📋 تم نسخ الكود', 'success');
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+            showToast('📋 تم نسخ الكود', 'success');
+        });
+    }
+
+    function shareCode(code) {
+        const text = `مرحباً! هذا كودي على شات كود: ${code}`;
+        if (navigator.share) {
+            navigator.share({ title: 'شات كود', text });
+        } else {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 تم نسخ الكود', 'success');
+            });
+        }
+    }
+
+    // ============================================================
+    // الإعدادات
+    // ============================================================
+    function goToSettings() {
+        document.getElementById('home').classList.remove('active');
+        document.getElementById('settings').classList.add('active');
+        loadSettings();
+    }
+
+    function closeSettings() {
+        document.getElementById('settings').classList.remove('active');
+        document.getElementById('home').classList.add('active');
+        loadChats();
+    }
+
+    function loadSettings() {
+        const container = document.getElementById('settingsList');
+        container.innerHTML = `
+            <div class="settings-item" onclick="showMyCode()">
+                <div class="icon"><i class="fas fa-qrcode"></i></div>
+                <div class="info"><div class="title">الكود الخاص بي</div><div class="sub">${currentUser.code || '------'}</div></div>
+                <div class="arrow"><i class="fas fa-chevron-left"></i></div>
+            </div>
+
+            <div class="settings-item" onclick="goToProfile()">
+                <div class="icon"><i class="fas fa-user"></i></div>
+                <div class="info"><div class="title">الملف الشخصي</div><div class="sub">تعديل الاسم والصورة</div></div>
+                <div class="arrow"><i class="fas fa-chevron-left"></i></div>
+            </div>
+
+            <div class="settings-item" onclick="changePassword()">
+                <div class="icon"><i class="fas fa-lock"></i></div>
+                <div class="info"><div class="title">تغيير كلمة المرور</div><div class="sub">تحديث كلمة المرور</div></div>
+                <div class="arrow"><i class="fas fa-chevron-left"></i></div>
+            </div>
+
+            <div class="settings-item" onclick="contactDev()">
+                <div class="icon"><i class="fas fa-headset"></i></div>
+                <div class="info"><div class="title">التواصل مع المطور</div><div class="sub">Msbah Waled</div></div>
+                <div class="arrow"><i class="fas fa-chevron-left"></i></div>
+            </div>
+
+            <div class="settings-item" onclick="suggestFeature()">
+                <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="info"><div class="title">اقتراح ميزة جديدة</div><div class="sub">أرسل اقتراحك</div></div>
+                <div class="arrow"><i class="fas fa-chevron-left"></i></div>
+            </div>
+
+            <div class="settings-item" onclick="logout()">
+                <div class="icon danger"><i class="fas fa-sign-out-alt"></i></div>
+                <div class="info"><div class="title" style="color:var(--danger);">تسجيل الخروج</div><div class="sub">الخروج من الحساب</div></div>
+                <div class="arrow"><i class="fas fa-chevron-left"></i></div>
+            </div>
+
+            <div style="text-align:center;padding:15px 0;opacity:0.2;font-size:11px;">
+                شات كود v2.0.0 | المطور: Msbah Waled
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // الملف الشخصي
+    // ============================================================
+    function goToProfile() {
+        document.getElementById('home').classList.remove('active');
+        document.getElementById('settings').classList.remove('active');
+        document.getElementById('profile').classList.add('active');
+        loadProfile();
+        loadFontsAndThemes();
+    }
+
+    function closeProfile() {
+        document.getElementById('profile').classList.remove('active');
+        document.getElementById('home').classList.add('active');
+        loadChats();
+    }
+
+    function loadProfile() {
+        document.getElementById('profileName').value = currentUser.name || '';
+        document.getElementById('profilePhone').value = currentUser.phone || '';
+        document.getElementById('profileCode').textContent = currentUser.code || '------';
+
+        const avatar = document.getElementById('profileAvatar');
+        if (currentUser.profileImage) {
+            avatar.innerHTML = `<img src="${currentUser.profileImage}"><div class="overlay">تغيير الصورة</div>`;
+        } else {
+            avatar.innerHTML = '<i class="fas fa-user"></i><div class="overlay">تغيير الصورة</div>';
+        }
+    }
+
+    function changeProfilePic() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (ev) => {
+                const imageData = await shrink(ev.target.result, 256, 0.8);
+                currentUser.profileImage = imageData;
+                DB.updateUser(currentUser.id, { profileImage: imageData });
+                localStorage.setItem('chat_current_user', JSON.stringify(currentUser));
+                loadProfile();
+                loadHome();
+                showToast('✅ تم تحديث الصورة', 'success');
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    }
+
+    function saveProfile() {
+        const name = document.getElementById('profileName').value.trim();
+        if (!name) {
+            showToast('الاسم مطلوب', 'error');
+            return;
+        }
+
+        currentUser.name = name;
+        DB.updateUser(currentUser.id, { name });
+        localStorage.setItem('chat_current_user', JSON.stringify(currentUser));
+        loadHome();
+        showToast('✅ تم حفظ الملف الشخصي', 'success');
+    }
+
+    // ============================================================
+    // تغيير كلمة المرور
+    // ============================================================
+    function changePassword() {
+        showModal('تغيير كلمة المرور', `
+            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="oldPass" placeholder="كلمة المرور الحالية"></div>
+            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="newPass" placeholder="كلمة المرور الجديدة (10 خانات)"></div>
+            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="confirmPass" placeholder="تأكيد كلمة المرور"></div>
+        `, `
+            <button class="cancel" onclick="closeModal()">إلغاء</button>
+            <button class="confirm" onclick="updatePassword()">تغيير</button>
+        `);
+    }
+
+    function updatePassword() {
+        const old = document.getElementById('oldPass').value;
+        const newP = document.getElementById('newPass').value;
+        const confirm = document.getElementById('confirmPass').value;
+
+        if (newP.length < 10) {
+            showToast('كلمة المرور 10 خانات', 'error');
+            return;
+        }
+        if (newP !== confirm) {
+            showToast('كلمة المرور غير متطابقة', 'error');
+            return;
+        }
+
+        const u = auth.currentUser;
+        const cred = firebase.auth.EmailAuthProvider.credential(u.email, old);
+        u.reauthenticateWithCredential(cred)
+            .then(() => u.updatePassword(newP))
+            .then(() => { closeModal(); showToast('✅ تم تغيير كلمة المرور', 'success'); })
+            .catch(() => showToast('كلمة المرور الحالية غير صحيحة', 'error'));
+        return;
+        closeModal();
+        showToast('✅ تم تغيير كلمة المرور', 'success');
+    }
+
+    // ============================================================
+    // التواصل مع المطور
+    // ============================================================
+    function contactDev() {
+        showModal('التواصل مع المطور', `
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div onclick="window.open('https://www.facebook.com/share/1EWgRaszmd/','_blank')" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.03);border-radius:12px;cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <i class="fab fa-facebook" style="color:#1877f2;font-size:22px;"></i> فيسبوك
+                </div>
+                <div onclick="window.open('tel:01040428382')" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.03);border-radius:12px;cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <i class="fas fa-phone" style="color:#25d366;font-size:22px;"></i> 01040428382
+                </div>
+                <div onclick="window.open('tel:01105588499')" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.03);border-radius:12px;cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <i class="fas fa-phone" style="color:#25d366;font-size:22px;"></i> 01105588499
+                </div>
+                <div onclick="window.open('https://www.instagram.com/msbhmsbhwlyd','_blank')" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.03);border-radius:12px;cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <i class="fab fa-instagram" style="color:#e4405f;font-size:22px;"></i> انستجرام
+                </div>
+                <div onclick="window.open('https://ama818981-sys.github.io/-7/','_blank')" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.03);border-radius:12px;cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <i class="fas fa-globe" style="color:#f39c12;font-size:22px;"></i> الموقع الرسمي
+                </div>
+            </div>
+            <p style="text-align:center;font-size:11px;opacity:0.2;margin-top:12px;">المطور: Msbah Waled</p>
+        `);
+    }
+
+    // ============================================================
+    // اقتراح ميزة جديدة
+    // ============================================================
+    function suggestFeature() {
+        showModal('اقتراح ميزة جديدة', `
+            <textarea id="suggestionText" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:#fff;font-family:var(--font-family);min-height:80px;resize:vertical;font-size:14px;" placeholder="اكتب اقتراحك هنا..."></textarea>
+        `, `
+            <button class="cancel" onclick="closeModal()">إلغاء</button>
+            <button class="confirm" onclick="sendSuggestion()">إرسال</button>
+        `);
+    }
+
+    function sendSuggestion() {
+        const text = document.getElementById('suggestionText').value.trim();
+        if (!text) {
+            showToast('اكتب الاقتراح', 'error');
+            return;
+        }
+
+        const phone = '01040428382';
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent('اقتراح: ' + text)}`, '_blank');
+        closeModal();
+        showToast('✅ تم إرسال الاقتراح', 'success');
+    }
+
+    // ============================================================
+    // تسجيل الخروج
+    // ============================================================
+    function logout() {
+        showModal('تسجيل الخروج', `
+            <p>هل أنت متأكد من رغبتك في تسجيل الخروج؟</p>
+        `, `
+            <button class="cancel" onclick="closeModal()">إلغاء</button>
+            <button class="danger" onclick="doLogout()">تسجيل الخروج</button>
+        `);
+    }
+
+    function doLogout() {
+        if (messageInterval) clearInterval(messageInterval);
+        localStorage.removeItem('chat_current_user');
+        unsubs.forEach(u => u()); unsubs = []; chatUnsubs.forEach(u => u()); chatUnsubs = [];
+        C.users = []; C.chats = []; C.msgs = {}; C.games = {};
+        auth.signOut();
+        closeModal();
+
+        document.getElementById('home').classList.remove('active');
+        document.getElementById('chat').classList.remove('active');
+        document.getElementById('settings').classList.remove('active');
+        document.getElementById('profile').classList.remove('active');
+        document.getElementById('login').classList.add('active');
+
+        currentUser = null;
+        chatWithUser = null;
+        gameActive = false;
+        showToast('👋 تم تسجيل الخروج', 'info');
+    }
+
+    // ============================================================
+    // مودال
+    // ============================================================
+    function showModal(title, body, footer = '') {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalBody').innerHTML = body;
+        document.getElementById('modalFooter').innerHTML = footer || '';
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    // ============================================================
+    // توست
+    // ============================================================
+    function showToast(message, type = 'info') {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-50%) translateY(20px) scale(0.9)';
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
+    // ============================================================
+    // تنسيق الوقت
+    // ============================================================
+    function formatTime(timestamp) {
+        if (!timestamp) return '';
+        try {
+            const date = new Date(timestamp);
+            const now = new Date();
+            if (date.toDateString() === now.toDateString()) {
+                return date.toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+            } else if (date.toDateString() === new Date(now - 86400000).toDateString()) {
+                return 'أمس';
+            }
+            return date.toLocaleDateString('ar', { day: '2-digit', month: 'short' });
+        } catch (e) {
+            return '';
+        }
+    }
+
+    // ============================================================
+    // مستخدمين تجريبيين
+    // ============================================================
+    // ============================================================
+    // بدء التطبيق
+    // ============================================================
+    console.log('💬 شات كود v2.0.0 - التطبيق جاهز!');
+    console.log('👨‍💻 المطور: Msbah Waled');
+    console.log('🎮 لعبة XO متاحة!');
+    console.log('📷 إرسال صور وفيديوهات متاح!');
+</script>
+
+</body>
+</html>
